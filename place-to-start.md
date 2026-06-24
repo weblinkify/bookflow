@@ -79,7 +79,7 @@ bookflow/
 ### **With Docker (Recommended)**
 ```bash
 # Switch to production branch
-git checkout production-upgrade
+git checkout main
 
 # Setup environment
 cp backend/.env.example backend/.env
@@ -353,7 +353,3 @@ For questions:
 ---
 
 **App is ready to serve clients! 🎉**
-
-**Branch**: `production-upgrade`
-**Status**: ✅ Ready for deployment
-**Date**: 2026-06-24
