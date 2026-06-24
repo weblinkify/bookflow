@@ -1,29 +1,63 @@
-import React from "react";
 import { useState } from "react";
-import axios from "axios";
 
 export default function Booking() {
   const [form, setForm] = useState({
+    service: "",
+    employee: "",
     date: "",
-    time: "",
-    customerId: "",
-    serviceId: "",
-    employeeId: ""
+    time: ""
   });
 
-  const submit = async () => {
-    await axios.post("http://localhost:4000/api/appointments", form);
-    alert("Booked!");
+  const services = ["Haircut", "Massage", "Consultation"];
+  const employees = ["John", "Anna", "Mike"];
+  const times = ["09:00", "10:00", "11:00", "14:00", "15:00"];
+
+  const submit = () => {
+    alert("Booking Confirmed 🎉");
+    console.log(form);
   };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>Book Appointment</h2>
+    <div className="page">
+      <div className="card">
 
-      <input placeholder="Date" onChange={e => setForm({ ...form, date: e.target.value })} />
-      <input placeholder="Time" onChange={e => setForm({ ...form, time: e.target.value })} />
+        <h1>Book Appointment</h1>
 
-      <button onClick={submit}>Confirm</button>
+        <div className="form">
+
+          <select onChange={(e) => setForm({ ...form, service: e.target.value })}>
+            <option>Select Service</option>
+            {services.map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
+
+          <select onChange={(e) => setForm({ ...form, employee: e.target.value })}>
+            <option>Select Employee</option>
+            {employees.map((e) => (
+              <option key={e}>{e}</option>
+            ))}
+          </select>
+
+          <input
+            type="date"
+            onChange={(e) => setForm({ ...form, date: e.target.value })}
+          />
+
+          <select onChange={(e) => setForm({ ...form, time: e.target.value })}>
+            <option>Select Time</option>
+            {times.map((t) => (
+              <option key={t}>{t}</option>
+            ))}
+          </select>
+
+          <button className="btn" onClick={submit}>
+            Confirm Booking
+          </button>
+
+        </div>
+
+      </div>
     </div>
   );
 }

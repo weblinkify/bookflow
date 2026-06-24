@@ -1,14 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <div style={{ padding: 40 }}>
+    <div className="container">
       <h1>BookFlow</h1>
-      <p>Appointment booking system</p>
+      <p>Modern appointment booking system for SMEs</p>
 
       <Link to="/book">
-        <button>Book Appointment</button>
+        <button className="btn">Book Appointment</button>
       </Link>
     </div>
   );
