@@ -14,7 +14,7 @@ export default function Home() {
             BookFlow
           </h1>
           <p className="text-blue-100 mt-2">
-            Modern appointment booking system for SMEs
+            Modern appointment booking system.
           </p>
         </div>
 
