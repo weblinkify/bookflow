@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.js';
 import api from '../lib/api.js';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, Loader } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 import type { AuthResponse } from '../types/index.js';
 
 export default function Login() {
@@ -77,25 +77,23 @@ export default function Login() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-3.5 text-gray-400" size={20} />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('email')}
-                    required
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-lg focus:outline-none transition-all duration-200 ${
-                      touched.email && !isEmailValid
-                        ? 'border-red-400 bg-red-50'
-                        : formData.email && isEmailValid
+
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('email')}
+                  required
+                  className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition-all duration-200 ${touched.email && !isEmailValid
+                      ? 'border-red-400 bg-red-50'
+                      : formData.email && isEmailValid
                         ? 'border-green-400 bg-green-50'
                         : 'border-gray-300 hover:border-gray-400 focus:border-blue-500'
                     }`}
-                    placeholder="you@example.com"
-                  />
-                </div>
+                  placeholder="you@example.com"
+                />
+
                 {touched.email && formData.email && !isEmailValid && (
                   <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
                     <span>✗</span> Invalid email format
@@ -108,8 +106,8 @@ export default function Login() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Password
                 </label>
+
                 <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 text-gray-400" size={20} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
@@ -117,13 +115,14 @@ export default function Login() {
                     onChange={handleChange}
                     onBlur={() => handleBlur('password')}
                     required
-                    className="w-full pl-12 pr-12 py-3 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
+                    className="w-full px-4 py-4 pr-12 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
                     placeholder="••••••••"
                   />
+
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -136,14 +135,7 @@ export default function Login() {
                 disabled={loading || !isFormValid}
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:shadow-none"
               >
-                {loading ? (
-                  <>
-                    <Loader className="animate-spin" size={20} />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign In'
-                )}
+                {loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
 
@@ -160,8 +152,8 @@ export default function Login() {
             {/* Register Link */}
             <p className="text-center text-gray-600">
               Don't have an account?{' '}
-              <Link 
-                to="/register" 
+              <Link
+                to="/register"
                 className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 Create one

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.js';
 import api from '../lib/api.js';
-import { Eye, EyeOff, User, Mail, Lock, AlertCircle, CheckCircle, Loader } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import type { AuthResponse } from '../types/index.js';
 
 export default function Register() {
@@ -111,19 +111,16 @@ export default function Register() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Full Name
                 </label>
-                <div className="relative">
-                  <User className="absolute left-4 top-3.5 text-gray-400" size={20} />
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('name')}
-                    required
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
-                    placeholder="John Doe"
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('name')}
+                  required
+                  className="w-full px-4 py-4 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
+                  placeholder="John Doe"
+                />
               </div>
 
               {/* Email Field */}
@@ -131,25 +128,21 @@ export default function Register() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-3.5 text-gray-400" size={20} />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('email')}
-                    required
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-lg focus:outline-none transition-all duration-200 ${
-                      touched.email && !isEmailValid
-                        ? 'border-red-400 bg-red-50'
-                        : formData.email && isEmailValid
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('email')}
+                  required
+                  className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition-all duration-200 ${touched.email && !isEmailValid
+                      ? 'border-red-400 bg-red-50'
+                      : formData.email && isEmailValid
                         ? 'border-green-400 bg-green-50'
                         : 'border-gray-300 hover:border-gray-400 focus:border-blue-500'
                     }`}
-                    placeholder="you@example.com"
-                  />
-                </div>
+                  placeholder="you@example.com"
+                />
               </div>
 
               {/* Password Field */}
@@ -157,30 +150,19 @@ export default function Register() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 text-gray-400" size={20} />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('password')}
-                    required
-                    className={`w-full pl-12 pr-12 py-3 border-2 rounded-lg focus:outline-none transition-all duration-200 ${
-                      isPasswordStrong && formData.password
-                        ? 'border-green-400 bg-green-50'
-                        : 'border-gray-300 hover:border-gray-400 focus:border-blue-500'
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('password')}
+                  required
+                  className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition-all duration-200 ${isPasswordStrong && formData.password
+                      ? 'border-green-400 bg-green-50'
+                      : 'border-gray-300 hover:border-gray-400 focus:border-blue-500'
                     }`}
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition"
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
+                  placeholder="••••••••"
+                />
                 <p className="text-xs text-gray-600 mt-1">Minimum 8 characters</p>
               </div>
 
@@ -189,37 +171,25 @@ export default function Register() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Confirm Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 text-gray-400" size={20} />
-                  <input
-                    type={showConfirm ? 'text' : 'password'}
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('confirmPassword')}
-                    required
-                    className={`w-full pl-12 pr-12 py-3 border-2 rounded-lg focus:outline-none transition-all duration-200 ${
-                      passwordsMatch && formData.confirmPassword
-                        ? 'border-green-400 bg-green-50'
-                        : formData.confirmPassword && !passwordsMatch
+                <input
+                  type={showConfirm ? 'text' : 'password'}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('confirmPassword')}
+                  required
+                  className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition-all duration-200 ${passwordsMatch && formData.confirmPassword
+                      ? 'border-green-400 bg-green-50'
+                      : formData.confirmPassword && !passwordsMatch
                         ? 'border-red-400 bg-red-50'
                         : 'border-gray-300 hover:border-gray-400 focus:border-blue-500'
                     }`}
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition"
-                  >
-                    {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
+                  placeholder="••••••••"
+                />
+
                 {formData.confirmPassword && (
-                  <p className={`text-sm mt-1 flex items-center gap-1 ${
-                    passwordsMatch ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {passwordsMatch ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+                  <p className={`text-sm mt-1 ${passwordsMatch ? 'text-green-600' : 'text-red-600'
+                    }`}>
                     {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
                   </p>
                 )}
@@ -234,7 +204,7 @@ export default function Register() {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
+                  className="w-full px-4 py-4 border-2 border-gray-300 hover:border-gray-400 focus:border-blue-500 rounded-lg focus:outline-none transition-all duration-200"
                 >
                   {roles.map(role => (
                     <option key={role.value} value={role.value}>
@@ -250,14 +220,7 @@ export default function Register() {
                 disabled={loading || !isFormValid}
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:shadow-none"
               >
-                {loading ? (
-                  <>
-                    <Loader className="animate-spin" size={20} />
-                    Creating account...
-                  </>
-                ) : (
-                  'Create Account'
-                )}
+                {loading ? 'Creating account...' : 'Create Account'}
               </button>
             </form>
 
@@ -274,8 +237,8 @@ export default function Register() {
             {/* Login Link */}
             <p className="text-center text-gray-600">
               Already have an account?{' '}
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 Sign in
