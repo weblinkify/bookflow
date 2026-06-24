@@ -34,7 +34,7 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-[93dvh] bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow p-6 mb-6 flex justify-between items-center">
