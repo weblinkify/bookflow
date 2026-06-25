@@ -1,26 +1,145 @@
 import { useState } from "react";
 
+interface BookingForm {
+  service: string;
+  employee: string;
+  date: string;
+  time: string;
+}
+
+interface FormErrors {
+  service?: string;
+  employee?: string;
+  date?: string;
+  time?: string;
+}
+
 export default function Booking() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<BookingForm>({
     service: "",
     employee: "",
     date: "",
     time: ""
   });
 
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   const services = ["Haircut", "Massage", "Consultation"];
   const employees = ["John", "Anna", "Mike"];
   const times = ["09:00", "10:00", "11:00", "14:00", "15:00"];
 
-  const submit = () => {
-    alert("Booking Confirmed 🎉");
-    console.log(form);
+  // Validation function
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!form.service.trim()) {
+      newErrors.service = "Please select a service";
+    }
+
+    if (!form.employee.trim()) {
+      newErrors.employee = "Please select an employee";
+    }
+
+    if (!form.date.trim()) {
+      newErrors.date = "Please select a date";
+    } else {
+      const selectedDate = new Date(form.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        newErrors.date = "Cannot book appointments in the past";
+      }
+    }
+
+    if (!form.time.trim()) {
+      newErrors.time = "Please select a time";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Check if form is valid for submit button
+  const isFormValid = (): boolean => {
+    return (
+      form.service.trim() !== "" &&
+      form.employee.trim() !== "" &&
+      form.date.trim() !== "" &&
+      form.time.trim() !== "" &&
+      Object.keys(errors).length === 0
+    );
+  };
+
+  // Handle field change
+  const handleFieldChange = (field: keyof BookingForm, value: string) => {
+    setForm({ ...form, [field]: value });
+    
+    // Clear error for this field when user starts typing
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: undefined });
+    }
+
+    // Clear success message when user modifies form
+    if (submitSuccess) {
+      setSubmitSuccess(false);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate before submit
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Simulate API call
+      const response = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: form
+          });
+        }, 1500);
+      });
+
+      console.log("Booking submitted:", response);
+      
+      // Show success message
+      setSubmitSuccess(true);
+
+      // Reset form
+      setForm({
+        service: "",
+        employee: "",
+        date: "",
+        time: ""
+      });
+      setErrors({});
+
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Booking failed:", error);
+      setErrors({ service: "An error occurred. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="min-h-[93dvh] bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
       
-      {/* Background blur blobs (same style as register) */}
+      {/* Background blur blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100 rounded-full opacity-20 blur-3xl"></div>
 
@@ -37,58 +156,146 @@ export default function Booking() {
           </p>
         </div>
 
+        {/* Success Message */}
+        {submitSuccess && (
+          <div className="mx-8 mt-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg">
+            <p className="text-green-800 font-semibold">✅ Booking Confirmed!</p>
+            <p className="text-green-700 text-sm mt-1">
+              Your appointment has been scheduled. Check your email for confirmation.
+            </p>
+          </div>
+        )}
+
         {/* Form */}
-        <div className="px-8 py-8 space-y-5">
+        <form onSubmit={handleSubmit} className="px-8 py-8 space-y-5">
 
           {/* Service */}
-          <select
-            className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none hover:border-gray-400 transition"
-            onChange={(e) => setForm({ ...form, service: e.target.value })}
-          >
-            <option value="">Select Service</option>
-            {services.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Service <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={form.service}
+              onChange={(e) => handleFieldChange("service", e.target.value)}
+              className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition ${
+                errors.service
+                  ? "border-red-500 focus:border-red-500 bg-red-50"
+                  : "border-gray-300 focus:border-blue-500 hover:border-gray-400"
+              }`}
+            >
+              <option value="">Select Service</option>
+              {services.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            {errors.service && (
+              <p className="text-red-500 text-sm mt-1 flex items-center">
+                <span className="mr-1">⚠️</span> {errors.service}
+              </p>
+            )}
+          </div>
 
           {/* Employee */}
-          <select
-            className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none hover:border-gray-400 transition"
-            onChange={(e) => setForm({ ...form, employee: e.target.value })}
-          >
-            <option value="">Select Employee</option>
-            {employees.map((e) => (
-              <option key={e} value={e}>{e}</option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Employee <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={form.employee}
+              onChange={(e) => handleFieldChange("employee", e.target.value)}
+              className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition ${
+                errors.employee
+                  ? "border-red-500 focus:border-red-500 bg-red-50"
+                  : "border-gray-300 focus:border-blue-500 hover:border-gray-400"
+              }`}
+            >
+              <option value="">Select Employee</option>
+              {employees.map((e) => (
+                <option key={e} value={e}>{e}</option>
+              ))}
+            </select>
+            {errors.employee && (
+              <p className="text-red-500 text-sm mt-1 flex items-center">
+                <span className="mr-1">⚠️</span> {errors.employee}
+              </p>
+            )}
+          </div>
 
           {/* Date */}
-          <input
-            type="date"
-            className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none hover:border-gray-400 transition"
-            onChange={(e) => setForm({ ...form, date: e.target.value })}
-          />
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Date <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              value={form.date}
+              onChange={(e) => handleFieldChange("date", e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
+              className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition ${
+                errors.date
+                  ? "border-red-500 focus:border-red-500 bg-red-50"
+                  : "border-gray-300 focus:border-blue-500 hover:border-gray-400"
+              }`}
+            />
+            {errors.date && (
+              <p className="text-red-500 text-sm mt-1 flex items-center">
+                <span className="mr-1">⚠️</span> {errors.date}
+              </p>
+            )}
+          </div>
 
           {/* Time */}
-          <select
-            className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none hover:border-gray-400 transition"
-            onChange={(e) => setForm({ ...form, time: e.target.value })}
-          >
-            <option value="">Select Time</option>
-            {times.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Time <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={form.time}
+              onChange={(e) => handleFieldChange("time", e.target.value)}
+              className={`w-full px-4 py-4 border-2 rounded-lg focus:outline-none transition ${
+                errors.time
+                  ? "border-red-500 focus:border-red-500 bg-red-50"
+                  : "border-gray-300 focus:border-blue-500 hover:border-gray-400"
+              }`}
+            >
+              <option value="">Select Time</option>
+              {times.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+            {errors.time && (
+              <p className="text-red-500 text-sm mt-1 flex items-center">
+                <span className="mr-1">⚠️</span> {errors.time}
+              </p>
+            )}
+          </div>
 
-          {/* Button */}
+          {/* Submit Button */}
           <button
-            onClick={submit}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
+            type="submit"
+            disabled={!isFormValid() || isSubmitting}
+            className={`w-full font-bold py-3 rounded-lg shadow-lg transition ${
+              isFormValid() && !isSubmitting
+                ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white cursor-pointer"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
           >
-            Confirm Booking
+            {isSubmitting ? (
+              <span className="flex items-center justify-center">
+                <span className="animate-spin mr-2">⏳</span>
+                Booking...
+              </span>
+            ) : (
+              "Confirm Booking"
+            )}
           </button>
 
-        </div>
+          {/* Form Info */}
+          <p className="text-gray-500 text-xs text-center mt-4">
+            All fields marked with <span className="text-red-500">*</span> are required
+          </p>
+
+        </form>
       </div>
     </div>
   );

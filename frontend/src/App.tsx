@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import MyBookings from './pages/MyBookings.js';
 
 export default function App() {
   const { user } = useAuthStore();
@@ -19,6 +20,7 @@ export default function App() {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/book" element={<Booking />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
         
         {/* Auth Routes - Redirect if already logged in */}
         <Route 

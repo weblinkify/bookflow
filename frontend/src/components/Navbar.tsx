@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.js';
-import { Menu, X, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, LogOut, LogIn, Calendar } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -27,31 +27,46 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
             >
               Home
             </Link>
-            <Link 
-              to="/book" 
+            <Link
+              to="/book"
               className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
             >
               Book Now
             </Link>
+            <Link
+              to="/my-bookings"
+              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+            >
+              <Calendar size={18} />
+              My Bookings
+            </Link>
 
             {user ? (
               <>
+                <Link
+                  to="/my-bookings"
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                >
+                  <Calendar size={18} />
+                  My Bookings
+                </Link>
+
                 {user.role === 'admin' && (
-                  <Link 
-                    to="/admin" 
+                  <Link
+                    to="/admin"
                     className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
                   >
                     Admin Panel
                   </Link>
                 )}
-                <Link 
-                  to="/dashboard" 
+                <Link
+                  to="/dashboard"
                   className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
                 >
                   Dashboard
@@ -101,34 +116,50 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4 space-y-3">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
-            <Link 
-              to="/book" 
+            <Link
+              to="/book"
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Book Now
             </Link>
+            <Link
+              to="/my-bookings"
+              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+            >
+              <Calendar size={18} />
+              My Bookings
+            </Link>
 
             {user ? (
               <>
+                <Link
+                  to="/my-bookings"
+                  className="flex items-center gap-2 block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Calendar size={18} />
+                  My Bookings
+                </Link>
+
                 {user.role === 'admin' && (
-                  <Link 
-                    to="/admin" 
+                  <Link
+                    to="/admin"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Admin Panel
                   </Link>
                 )}
-                <Link 
-                  to="/dashboard" 
+                <Link
+                  to="/dashboard"
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
