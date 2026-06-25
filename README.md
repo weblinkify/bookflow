@@ -3,6 +3,10 @@
 ## 🌐 Live Demo
 https://bookflowui.netlify.app/
 
+![Booking](./frontend/assets/booking.png)
+
+![MyBooking](./frontend/assets/my-booking.png)
+
 ---
 
 ## 📌 Overview
