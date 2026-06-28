@@ -1,127 +1,174 @@
-import { useEffect, useState } from 'react';
-import { useAuthStore } from '../store/auth.js';
-import api from '../lib/api.js';
-import type { Appointment } from '../types/index.js';
+import {
+  Calendar,
+  Users,
+  DollarSign,
+  Bell,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
+const data = [
+  { name: "Mon", bookings: 40 },
+  { name: "Tue", bookings: 65 },
+  { name: "Wed", bookings: 50 },
+  { name: "Thu", bookings: 80 },
+  { name: "Fri", bookings: 95 },
+  { name: "Sat", bookings: 120 },
+  { name: "Sun", bookings: 110 },
+];
 export default function Dashboard() {
-  const { user, logout } = useAuthStore();
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
-
-  const fetchAppointments = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get('/appointments');
-      setAppointments(response.data);
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to fetch appointments');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="min-h-[93dvh] bg-gray-50 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">Welcome back, {user?.name}!</h1>
-            <p className="text-gray-600 mt-2">Role: <span className="font-semibold capitalize">{user?.role}</span></p>
-          </div>
-          <button
-            onClick={logout}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition"
-          >
-            Logout
-          </button>
+    <div className="flex min-h-screen bg-gray-950 text-white">
+
+      {/* ---------------- MAIN ---------------- */}
+      <main className="flex-1 space-y-6">
+
+        {/* ---------------- CORE BUSINESS KPIs ---------------- */}
+        <div className="grid grid-cols-4 gap-4">
+          <KpiCard title="Total Revenue" value="$24,780" icon={<DollarSign />} />
+          <KpiCard title="Monthly Revenue" value="$6,420" icon={<DollarSign />} />
+          <KpiCard title="Total Bookings" value="1,248" icon={<Calendar />} />
+          <KpiCard title="Total Customers" value="342" icon={<Users />} />
         </div>
 
-        {/* Main Content */}
-        <div className="grid md:grid-cols-3 gap-6 mb-6">
-          {/* Quick Stats */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-4xl font-bold text-blue-600">{appointments.length}</div>
-            <p className="text-gray-600 mt-2">Your Appointments</p>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-4xl font-bold text-green-600">
-              {appointments.filter(a => a.status === 'SCHEDULED').length}
+        {/* ---------------- DAILY OPS KPIs ---------------- */}
+        <div className="grid grid-cols-4 gap-4">
+          <KpiCard title="Today Revenue" value="$1,240" icon={<DollarSign />} />
+          <KpiCard title="Revenue Target" value="78%" icon={<DollarSign />} />
+          <KpiCard title="New Bookings" value="32" icon={<Calendar />} />
+          <KpiCard title="Cancellations" value="4" icon={<Bell />} />
+        </div>
+
+        {/* ---------------- STAFF KPIs ---------------- */}
+        <div className="grid grid-cols-4 gap-4">
+          <KpiCard title="Active Staff" value="14" icon={<Users />} />
+          <KpiCard title="Top Performer" value="Lisa A." icon={<Users />} />
+          <KpiCard title="Avg Rating" value="4.8" icon={<Users />} />
+          <KpiCard title="Utilization" value="82%" icon={<Users />} />
+        </div>
+
+        {/* ---------------- CHART + APPOINTMENTS ---------------- */}
+        <div className="grid grid-cols-3 gap-4">
+
+          {/* CHART */}
+          <div className="col-span-2 bg-gray-900 border border-gray-800 p-5 rounded-xl">
+            <h3 className="font-semibold mb-4">Bookings Overview</h3>
+
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#2d2d2d" />
+                  <XAxis dataKey="name" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#111827",
+                      border: "1px solid #374151",
+                      color: "#fff",
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="bookings"
+                    stroke="#6366f1"
+                    strokeWidth={2}
+                    dot={{ fill: "#6366f1" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
-            <p className="text-gray-600 mt-2">Scheduled</p>
           </div>
-          
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-4xl font-bold text-orange-600">
-              {appointments.filter(a => a.status === 'COMPLETED').length}
+
+          {/* APPOINTMENTS */}
+          <div className="bg-gray-900 border border-gray-800 p-5 rounded-xl">
+            <h3 className="font-semibold mb-4">Upcoming Appointments</h3>
+
+            <div className="space-y-3 text-sm">
+              <Appointment name="Sarah Johnson" time="10:00 AM" service="Haircut" />
+              <Appointment name="Michael Brown" time="11:30 AM" service="Beard Trim" />
+              <Appointment name="Emily Davis" time="01:00 PM" service="Color" />
             </div>
-            <p className="text-gray-600 mt-2">Completed</p>
           </div>
         </div>
 
-        {/* Appointments Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800">Your Appointments</h2>
-          </div>
+        {/* ---------------- BOTTOM GRID ---------------- */}
+        <div className="grid grid-cols-3 gap-4">
 
-          {error && (
-            <div className="p-4 bg-red-50 border border-red-200 text-red-700">
-              {error}
-            </div>
-          )}
+          <BottomCard title="Top Services">
+            <p>Haircut - 432</p>
+            <p>Massage - 298</p>
+            <p>Nails - 186</p>
+          </BottomCard>
 
-          {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading appointments...</div>
-          ) : appointments.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <p>No appointments yet.</p>
-              <a href="/book" className="text-blue-600 hover:text-blue-700 font-semibold mt-2 inline-block">
-                Book your first appointment →
-              </a>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Service</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date & Time</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {appointments.map(apt => (
-                    <tr key={apt.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-800">{apt.service.name}</td>
-                      <td className="px-6 py-4 text-sm text-gray-800">{apt.employee.user.name}</td>
-                      <td className="px-6 py-4 text-sm text-gray-800">
-                        {new Date(apt.date).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          apt.status === 'SCHEDULED' ? 'bg-blue-100 text-blue-800' :
-                          apt.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {apt.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <BottomCard title="Top Employees">
+            <p>John Smith</p>
+            <p>Lisa Anderson</p>
+            <p>Robert Taylor</p>
+          </BottomCard>
+
+          <BottomCard title="Revenue Split">
+            <p>Services 57%</p>
+            <p>Products 25%</p>
+            <p>Other 18%</p>
+          </BottomCard>
+
         </div>
+
+      </main>
+    </div>
+  );
+}
+
+/* ---------------- COMPONENTS ---------------- */
+
+function NavItem({ icon, label, active = false }: any) {
+  return (
+    <div
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer ${active ? "bg-indigo-600 text-white" : "text-gray-400 hover:bg-gray-800"
+        }`}
+    >
+      {icon}
+      {label}
+    </div>
+  );
+}
+
+function KpiCard({ title, value, icon }: any) {
+  return (
+    <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl">
+      <div className="flex justify-between items-center">
+        <div>
+          <p className="text-gray-400 text-sm">{title}</p>
+          <h3 className="text-xl font-bold">{value}</h3>
+        </div>
+        <div className="text-indigo-400">{icon}</div>
       </div>
+    </div>
+  );
+}
+
+function Appointment({ name, time, service }: any) {
+  return (
+    <div className="bg-gray-800 p-3 rounded-lg">
+      <p className="font-semibold">{name}</p>
+      <p className="text-xs text-gray-400">{service}</p>
+      <p className="text-xs text-indigo-400">{time}</p>
+    </div>
+  );
+}
+
+function BottomCard({ title, children }: any) {
+  return (
+    <div className="bg-gray-900 border border-gray-800 p-5 rounded-xl">
+      <h3 className="font-semibold mb-3">{title}</h3>
+      <div className="text-sm text-gray-300 space-y-1">{children}</div>
     </div>
   );
 }
