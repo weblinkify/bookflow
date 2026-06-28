@@ -4,11 +4,11 @@
 
 https://bookflowui.netlify.app/
 
-![Booking](./frontend/assets/dashboard.png)
-![Booking](./frontend/assets/bookings.png)
-![My Booking](./frontend/assets/my-booking.png)
-![Booking](./frontend/assets/chat-bot.png)
-![Booking](./frontend/assets/employees.png)
+![Dashboard](./frontend/assets/dashboard.png)
+![Bookings](./frontend/assets/bookings.png)
+![My Booking](./frontend/assets/new-booking.png)
+![ChatBot](./frontend/assets/chat-bot.png)
+![Employees](./frontend/assets/employees.png)
 
 ---
 
