@@ -36,7 +36,14 @@ export const useBookingStore = create<BookingStore>((set) => ({
   employees: [
     { id: "e1", name: "John", role: "haircut", active: true },
     { id: "e2", name: "Anna", role: "massage", active: true },
-    { id: "e3", name: "Mike", role: "spa", active: true },
+    { id: "e3", name: "Mike", role: "haircut", active: true },
+    { id: "e4", name: "Sara", role: "haircut", active: true },
+    { id: "e5", name: "Tom", role: "haircut", active: true },
+    { id: "e6", name: "Emma", role: "spa", active: true },
+    { id: "e7", name: "Liam", role: "massage", active: true },
+    { id: "e8", name: "Tom", role: "massage", active: true },
+    { id: "e9", name: "Rio", role: "spa", active: true },
+    { id: "e10", name: "Ysar", role: "spa", active: true },
   ],
 
   setBookings: (bookings) => set({ bookings }),

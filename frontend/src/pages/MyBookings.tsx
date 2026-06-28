@@ -153,8 +153,8 @@ export default function MyBookings() {
   // UI
   // -----------------------------
   return (
-    <div className="min-h-screen bg-gray-950 pt-20 pb-20 px-4 text-white">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-950 pt-5 pb-20 px-4 text-white">
+      <div>
 
         {/* Header */}
         <div className="mb-12">

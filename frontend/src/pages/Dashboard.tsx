@@ -25,7 +25,7 @@ const data = [
 ];
 export default function Dashboard() {
   return (
-    <div className="flex min-h-screen bg-gray-950 text-white">
+    <div className="flex pt-5 min-h-screen bg-gray-950 text-white">
 
       {/* ---------------- MAIN ---------------- */}
       <main className="flex-1 space-y-6">
